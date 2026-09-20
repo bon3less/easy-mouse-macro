@@ -1,0 +1,630 @@
+:root {
+  --bg: #16171a;
+  --panel: #1f2126;
+  --panel-2: #262932;
+  --line: #33373f;
+  --text: #e8eaed;
+  --muted: #9aa0aa;
+  --red: #d63a3a;
+  --red-dark: #a32020;
+  --blue: #2f7de1;
+  --green: #2fa46a;
+  --radius: 10px;
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* Chrome measures an action popup from its document and does NOT grow it when
+ * an out-of-flow overlay appears, so a dialog in a `position: fixed` backdrop
+ * got clipped at the bottom.  The box is therefore sized once, for the tallest
+ * view, and every layer is anchored to it. */
+body {
+  --popup-h: 496px;
+  position: relative;
+  width: 344px;
+  height: var(--popup-h);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 13px/1.45 "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.head {
+  padding: 14px 16px 10px;
+  border-bottom: 1px solid var(--line);
+  background: linear-gradient(180deg, #1b1d21, #16171a);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--red);
+  box-shadow: 0 0 0 3px rgba(214, 58, 58, 0.18);
+}
+
+h1 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 650;
+  letter-spacing: 0.2px;
+}
+
+.target {
+  margin: 6px 0 0;
+  color: var(--muted);
+  font-size: 11px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+main {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  padding: 14px 16px 16px;
+}
+
+.status {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 10px 12px;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  background: var(--panel-2);
+  color: var(--muted);
+}
+
+.pill::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.pill[data-state="recording"] {
+  color: #ff6b6b;
+  background: rgba(214, 58, 58, 0.14);
+}
+
+.pill[data-state="recording"]::before {
+  animation: blink 1s steps(2, start) infinite;
+}
+
+.pill[data-state="playing"] {
+  color: #6db3ff;
+  background: rgba(47, 125, 225, 0.16);
+}
+
+.pill[data-state="ready"] {
+  color: #68d39b;
+  background: rgba(47, 164, 106, 0.14);
+}
+
+@keyframes blink {
+  to {
+    visibility: hidden;
+  }
+}
+
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+  margin: 10px 0 0;
+}
+
+.metrics div {
+  min-width: 0;
+}
+
+dt {
+  color: var(--muted);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+dd {
+  margin: 2px 0 0;
+  font-size: 15px;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.controls {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 42px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--panel-2);
+  color: var(--text);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: filter 0.12s ease, transform 0.05s ease;
+}
+
+.btn:hover:not(:disabled) {
+  filter: brightness(1.12);
+}
+
+.btn:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.btn:disabled {
+  opacity: 0.42;
+  cursor: not-allowed;
+}
+
+.btn-record {
+  background: linear-gradient(180deg, #e14a4a, var(--red-dark));
+  border-color: #8e1c1c;
+}
+
+.btn-record.is-recording {
+  background: linear-gradient(180deg, #3a3d45, #2a2d33);
+  border-color: var(--line);
+}
+
+.btn-play {
+  background: linear-gradient(180deg, #3b8dea, #1f5fba);
+  border-color: #1a4f9c;
+}
+
+.btn-ghost {
+  background: transparent;
+}
+
+.btn-sm {
+  height: 32px;
+  font-size: 12px;
+  padding: 0 12px;
+}
+
+.rec-ico {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #fff;
+}
+
+.btn-record.is-recording .rec-ico {
+  border-radius: 2px;
+  background: #ff6b6b;
+}
+
+.play-ico {
+  width: 0;
+  height: 0;
+  border-left: 11px solid #fff;
+  border-top: 6px solid transparent;
+  border-bottom: 6px solid transparent;
+}
+
+.btn:disabled .play-ico {
+  border-left-color: #cfd3da;
+}
+
+.progress-row {
+  margin-top: 12px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 10px 12px;
+}
+
+.progress {
+  height: 6px;
+  border-radius: 999px;
+  background: var(--panel-2);
+  overflow: hidden;
+}
+
+.progress-bar {
+  width: 0%;
+  height: 100%;
+  background: var(--blue);
+  transition: width 0.15s linear;
+}
+
+.progress-text {
+  margin: 8px 0 8px;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+/* The history list scrolls inside the fixed popup box: ten macros cannot be
+ * allowed to push the buttons or the footer out of a window Chrome sizes once. */
+.history {
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
+}
+
+.history-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.history-title {
+  margin: 0;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* How many macros to keep, asked on the same line as the list it governs.  It
+ * shares the heading's height on purpose: a header that grows when a setting is
+ * looked at would push the footer out of a popup Chrome sizes once. */
+.history-keep {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-right: auto;
+  color: var(--muted);
+  font-size: 10px;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+}
+
+.history-limit {
+  height: 18px;
+  padding: 0 2px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  color: var(--text);
+  font: inherit;
+  font-size: 10px;
+}
+
+.history-empty {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.history-list {
+  list-style: none;
+  margin: 8px 0 0;
+  padding: 0;
+  max-height: 104px;
+  overflow-y: auto;
+}
+
+.history-list:empty {
+  display: none;
+}
+
+.history-item {
+  display: flex;
+  align-items: stretch;
+  gap: 6px;
+  margin-bottom: 5px;
+}
+
+.history-row {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  padding: 6px 8px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--text);
+  font: inherit;
+  font-size: 11.5px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.history-row:hover:not(:disabled) {
+  background: var(--panel-2);
+}
+
+.history-row:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
+.history-item.is-current .history-row {
+  border-color: var(--blue);
+}
+
+.history-when {
+  flex: 0 0 auto;
+  font-weight: 600;
+}
+
+.history-host {
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: var(--muted);
+}
+
+.history-count {
+  flex: 0 0 auto;
+  margin-left: auto;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.history-rename {
+  flex: 0 0 auto;
+  padding: 0 6px;
+  font-size: 12px;
+  line-height: 1;
+}
+
+.history-del {
+  flex: 0 0 auto;
+  padding: 0 7px;
+  font-size: 12px;
+  line-height: 1;
+}
+
+/* Naming a macro replaces its row with a field of the same height, so that
+ * typing a name cannot change how much of the list is on screen. */
+.history-name {
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 32px;
+  padding: 6px 8px;
+  background: var(--panel-2);
+  border: 1px solid var(--blue);
+  border-radius: 8px;
+  color: var(--text);
+  font: inherit;
+  font-size: 11.5px;
+}
+
+.foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: auto; /* keeps the footer at the bottom of the fixed popup box */
+  padding-top: 12px;
+}
+
+.link {
+  background: none;
+  border: 0;
+  padding: 0;
+  color: var(--muted);
+  font: inherit;
+  font-size: 11px;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.link:hover {
+  color: var(--text);
+}
+
+.hint {
+  color: var(--muted);
+  font-size: 11px;
+  text-align: right;
+  flex: 1;
+}
+
+.error {
+  margin: 12px 0 0;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: rgba(214, 58, 58, 0.14);
+  border: 1px solid rgba(214, 58, 58, 0.4);
+  color: #ffb4b4;
+  font-size: 11px;
+}
+
+/* Dialog ------------------------------------------------------------- */
+
+.dialog-backdrop {
+  position: absolute; /* anchored to the popup box, not to the viewport */
+  inset: 0;
+  display: flex;
+  overflow: auto;
+  padding: 14px;
+  background: rgba(8, 9, 11, 0.72);
+  z-index: 10;
+}
+
+.dialog-backdrop[hidden] {
+  display: none;
+}
+
+.dialog {
+  width: 100%;
+  flex: none;
+  margin: auto; /* safe centring: stays reachable by scrolling if it ever overflows */
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 14px;
+}
+
+.dialog h2 {
+  margin: 0 0 12px;
+  font-size: 14px;
+  font-weight: 650;
+}
+
+.field {
+  display: block;
+  margin-bottom: 14px;
+}
+
+.field-label {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+
+.field-label output {
+  color: var(--text);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.field-help {
+  display: block;
+  margin-top: 5px;
+  color: var(--muted);
+  font-size: 10.5px;
+}
+
+input[type="number"] {
+  width: 100%;
+  height: 34px;
+  padding: 0 10px;
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  font: inherit;
+  font-variant-numeric: tabular-nums;
+}
+
+input[type="range"] {
+  width: 100%;
+  accent-color: var(--blue);
+}
+
+.ticks {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 2px;
+  color: var(--muted);
+  font-size: 9px;
+  font-variant-numeric: tabular-nums;
+}
+
+.check {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.35;
+  margin-bottom: 10px;
+}
+
+.check input {
+  margin-top: 1px;
+  accent-color: var(--blue);
+}
+
+.estimate {
+  margin: 0 0 12px;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.dialog-actions {
+  display: grid;
+  grid-template-columns: 1fr 1.3fr;
+  gap: 10px;
+}
+
+/* Keyboard shortcuts --------------------------------------------- */
+
+/* Same two columns as .controls, so each hint sits under its button. */
+.shortcuts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 7px;
+}
+
+.kbd-hint {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  color: var(--muted);
+  font-size: 10.5px;
+}
+
+kbd {
+  font-family: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, Consolas, monospace;
+  font-size: 9.5px;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--text);
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-bottom-width: 2px;
+  border-radius: 5px;
+  padding: 1px 5px;
+  white-space: nowrap;
+}
+
+.btn kbd {
+  background: rgba(0, 0, 0, 0.26);
+  border-color: rgba(255, 255, 255, 0.22);
+  border-bottom-width: 1px;
+}
+
+kbd.is-unassigned {
+  color: var(--muted);
+  font-weight: 500;
+  font-style: italic;
+  background: none;
+  border-style: dashed;
+}

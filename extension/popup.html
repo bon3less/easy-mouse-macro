@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Easy Mouse Macro</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <header class="head">
+      <div class="brand">
+        <span class="dot" aria-hidden="true"></span>
+        <h1>Easy Mouse Macro</h1>
+      </div>
+      <p id="target" class="target" title="Target tab">No web tab detected</p>
+    </header>
+
+    <main>
+      <section class="status" aria-live="polite">
+        <div class="pill" id="state-pill" data-state="idle">Idle</div>
+        <dl class="metrics">
+          <div>
+            <dt>Events</dt>
+            <dd id="m-events">0</dd>
+          </div>
+          <div>
+            <dt>Moves</dt>
+            <dd id="m-moves">0</dd>
+          </div>
+          <div>
+            <dt>Clicks</dt>
+            <dd id="m-clicks">0</dd>
+          </div>
+          <div>
+            <dt>Length</dt>
+            <dd id="m-length">0.0s</dd>
+          </div>
+        </dl>
+      </section>
+
+      <section class="controls">
+        <button id="btn-record" class="btn btn-record" type="button" title="Record (Alt+Shift+E)">
+          <span class="rec-ico" aria-hidden="true"></span>
+          <span class="btn-label">Record</span>
+        </button>
+
+        <button id="btn-play" class="btn btn-play" type="button" disabled title="Replay the recording">
+          <span class="play-ico" aria-hidden="true"></span>
+          <span class="btn-label">Play</span>
+        </button>
+      </section>
+
+      <!-- The shortcuts Chrome reports for this install, under their buttons -->
+      <div class="shortcuts">
+        <span class="kbd-hint">
+          <kbd data-command="emm-toggle-record">Alt+Shift+E</kbd>
+          <span>record / stop recording</span>
+        </span>
+        <span class="kbd-hint">
+          <kbd data-command="emm-stop-playback">Alt+Shift+S</kbd>
+          <span>stop a running replay</span>
+        </span>
+      </div>
+
+      <section id="progress-row" class="progress-row" hidden>
+        <div class="progress"><div class="progress-bar" id="progress-bar"></div></div>
+        <p id="progress-text" class="progress-text">Playing&hellip;</p>
+        <button id="btn-stop-play" class="btn btn-ghost btn-sm" type="button" title="Stop the replay (Alt+Shift+S)">
+          Stop playback
+          <kbd data-command="emm-stop-playback">Alt+Shift+S</kbd>
+        </button>
+      </section>
+
+      <!-- The last few finished macros.  Rows are built by popup.js - never
+           from a string, because the host in a row came from a page's URL. -->
+      <section class="history" aria-labelledby="history-title">
+        <div class="history-head">
+          <h2 id="history-title" class="history-title">History</h2>
+          <!-- Options are filled from core.LIMITS.HISTORY_CHOICES, so the numbers
+               offered here and the numbers the history keeps cannot drift apart. -->
+          <label class="history-keep" for="history-limit" title="How many finished macros to keep">
+            Keep
+            <select id="history-limit" class="history-limit"></select>
+          </label>
+          <button id="btn-clear-history" class="link" type="button" title="Forget every stored macro">
+            Clear history
+          </button>
+        </div>
+        <p id="history-empty" class="history-empty">
+          Finished recordings land here as you stop them, and the last few are kept -
+          through another tab, and through closing Chrome.
+        </p>
+        <ul id="history-list" class="history-list"></ul>
+      </section>
+
+      <section class="foot">
+        <button id="btn-clear" class="link" type="button">Clear recording</button>
+        <span id="hint" class="hint">Click Record, use the mouse and keys in the page, then click Stop.</span>
+      </section>
+
+      <p id="error" class="error" hidden></p>
+    </main>
+
+    <!-- Play configuration: asked every time Play is pressed -->
+    <div id="dialog" class="dialog-backdrop" hidden>
+      <form id="play-form" class="dialog" autocomplete="off">
+        <h2>Replay the macro</h2>
+
+        <label class="field" for="repetitions">
+          <span class="field-label">
+            Repetitions
+            <output id="repetitions-out" for="repetitions">1</output>
+          </span>
+          <input id="repetitions" name="repetitions" type="number" min="1" max="999" step="1" value="1" inputmode="numeric" />
+          <span class="field-help">How many times should the recorded macro play?</span>
+        </label>
+
+        <label class="field" for="speed">
+          <span class="field-label">
+            Speed
+            <output id="speed-out" for="speed">1&times;</output>
+          </span>
+          <input id="speed" name="speed" type="range" min="1" max="10" step="1" value="1" />
+          <span class="ticks" aria-hidden="true">
+            <span>1&times;</span><span>2&times;</span><span>3&times;</span><span>4&times;</span><span>5&times;</span>
+            <span>6&times;</span><span>7&times;</span><span>8&times;</span><span>9&times;</span><span>10&times;</span>
+          </span>
+          <span class="field-help">1&times; = recorded speed, 10&times; = ten times as fast.</span>
+        </label>
+
+        <label class="check" for="trusted">
+          <input id="trusted" type="checkbox" checked />
+          <span>Use real browser input (attaches the debugger to this tab). Uncheck to replay as page-level events only.</span>
+        </label>
+
+        <p class="estimate" id="estimate">&asymp; 0.0s of playback</p>
+
+        <div class="dialog-actions">
+          <button id="btn-cancel" class="btn btn-ghost" type="button">Cancel</button>
+          <button id="btn-confirm" class="btn btn-play" type="submit">Start playback</button>
+        </div>
+      </form>
+    </div>
+
+    <script src="lib/macro-core.js"></script>
+    <script src="popup.js"></script>
+  </body>
+</html>

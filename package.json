@@ -1,0 +1,16 @@
+{
+  "name": "easy-mouse-macro",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Chrome MV3 extension that records and replays mouse movement and clicks. Tests only - the extension itself is plain files in extension/.",
+  "scripts": {
+    "icons": "node tools/make-icons.mjs",
+    "check": "node tools/check-extension.mjs",
+    "test:unit": "node --test tests/core.test.mjs tests/manifest.test.mjs",
+    "test:e2e": "xvfb-run -a -- node --test --test-concurrency=1 tests/e2e.test.mjs",
+    "test": "npm run check && npm run test:unit && npm run test:e2e"
+  },
+  "devDependencies": {
+    "playwright": "1.61.1"
+  }
+}

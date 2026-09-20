@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>EMM test page</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        background: #fafafa;
+        font: 13px/1.4 system-ui, sans-serif;
+      }
+      .box {
+        position: absolute;
+        width: 80px;
+        height: 80px;
+        border-radius: 8px;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        user-select: none;
+        cursor: pointer;
+      }
+      #box-a {
+        left: 60px;
+        top: 60px;
+        background: #2f6fd6;
+      }
+      #box-b {
+        left: 300px;
+        top: 180px;
+        background: #2fa46a;
+      }
+      #box-c {
+        left: 120px;
+        top: 320px;
+        background: #b34f2f;
+      }
+      .box:hover {
+        filter: brightness(1.2);
+      }
+      .box.pressed {
+        outline: 3px solid #000;
+      }
+      #spacer {
+        height: 1600px;
+        background: linear-gradient(#eee, #ccc);
+      }
+      #log-count {
+        position: fixed;
+        left: 8px;
+        top: 8px;
+        background: #000;
+        color: #fff;
+        padding: 4px 8px;
+        border-radius: 4px;
+        z-index: 5;
+      }
+      /* Real form widgets: their state only changes if the browser performs the
+         click's *default action*, which is what the checkbox test asserts. */
+      #controls {
+        position: absolute;
+        left: 620px;
+        top: 60px;
+        width: 380px;
+      }
+      #controls p {
+        margin: 0 0 18px;
+      }
+      #controls input[type='checkbox'],
+      #controls input[type='radio'] {
+        /* width: 34px; */
+        /*height: 34px; */
+        margin: 0 10px 0 0;
+        vertical-align: middle;
+        cursor: pointer;
+      }
+      #chk-b-label {
+        display: inline-block;
+        padding: 14px 18px;
+        background: #e6edf9;
+        border-radius: 8px;
+        cursor: pointer;
+        user-select: none;
+      }
+      .max-height-calc {
+        height: auto;
+        max-height: calc(100dvh - 50rem);
+        width: 425px;
+      }
+      .flex-1 {
+        flex: 1;
+      }
+      .overflow-y-auto {
+        overflow-y: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="log-count">0</div>
+    <div class="box" id="box-a" data-name="A">A</div>
+    <div class="box" id="box-b" data-name="B">B</div>
+    <div class="box" id="box-c" data-name="C">C</div>
+    <div id="controls">
+      <p><input type="checkbox" id="chk-a" /><span id="chk-a-name">plain checkbox</span></p>
+      <p>
+        <input type="checkbox" id="chk-b" />
+        <label id="chk-b-label" for="chk-b">toggle me by the label</label>
+      </p>
+      <p>
+        <input type="radio" id="radio-1" name="group" checked /><span>first</span>
+        <input type="radio" id="radio-2" name="group" /><span>second</span>
+      </p>
+      <p id="change-count">changes: 0</p>
+      <div id="mouse-wheel-click-test"  class="flex-1 overflow-y-auto max-height-calc">
+        <details><summary>Models:</summary><ul><li><label><input autocomplete="off" type="checkbox" value="Qwen3-14B-GGUF"><span>Qwen3-14B-GGUF</span></label></li><li><label><input autocomplete="off" type="checkbox" value="Qwen3-14B-unsloth-bnb-4bit"><span>Qwen3-14B-unsloth-bnb-4bit</span></label></li><li><label><input autocomplete="off" type="checkbox" value="Qwen3-0.6B-unsloth-bnb-4bit"><span>Qwen3-0.6B-unsloth-bnb-4bit</span></label></li><li><label><input autocomplete="off" type="checkbox" value="Qwen3-0.6B-bnb-4bit"><span>Qwen3-0.6B-bnb-4bit</span></label></li><li><label><input autocomplete="off" type="checkbox" value="Qwen3-8B-128K-GGUF"><span>Qwen3-8B-128K-GGUF</span></label></li><li><label><input autocomplete="off" type="checkbox" value="Qwen3-1.7B"><span>Qwen3-1.7B</span></label></li><li><label><input autocomplete="off" type="checkbox" value="Qwen3-1.7B-GGUF"><span>Qwen3-1.7B-GGUF</span></label></li><li><label><input autocomplete="off" type="checkbox" value="Qwen3-1.7B-unsloth-bnb-4bit"><span>Qwen3-1.7B-unsloth-bnb-4bit</span></label></li><li><label><input autocomplete="off" type="checkbox" value="Qwen3-1.7B-bnb-4bit"><span>Qwen3-1.7B-bnb-4bit</span></label></li><li><label><input autocomplete="off" type="checkbox" value="Qwen3-8B-Base"><span>Qwen3-8B-Base</span></label></li><li><label><input autocomplete="off" type="checkbox" value="Qwen3-8B-Base-unsloth-bnb-4bit"><span>Qwen3-8B-Base-unsloth-bnb-4bit</span></label></li><li><label><input autocomplete="off" type="checkbox" value="Qwen3-8B-Base-bnb-4bit"><span>Qwen3-8B-Base-bnb-4bit</span></label></li><li><label><input autocomplete="off" type="checkbox" value="Qwen3-14B-Base"><span>Qwen3-14B-Base</span></label></li><li><label><input autocomplete="off" type="checkbox" value="Qwen3-14B-Base-unsloth-bnb-4bit"><span>Qwen3-14B-Base-unsloth-bnb-4bit</span></label></li><li><label><input autocomplete="off" type="checkbox" value="Qwen3-14B-Base-bnb-4bit"><span>Qwen3-14B-Base-bnb-4bit</span></label></li><li><label><input autocomplete="off" type="checkbox" value="Qwen3-30B-A3B-Base"><span>Qwen3-30B-A3B-Base</span></label></li><li><label><input autocomplete="off" type="checkbox" value="Qwen3-30B-A3B-Base-bnb-4bit"><span>Qwen3-30B-A3B-Base-bnb-4bit</span></label></li><li><label><input autocomplete="off" type="checkbox" value="Qwen3-30B-A3B-bnb-4bit"><span>Qwen3-30B-A3B-bnb-4bit</span></label></li><li><label><input autocomplete="off" type="checkbox" value="Qwen3-0.6B-FP8"><span>Qwen3-0.6B-FP8</span></label></li><li><label><input autocomplete="off" type="checkbox" value="Qwen3-1.7B-FP8"><span>Qwen3-1.7B-FP8</span></label></li><li><label><input autocomplete="off" type="checkbox" value="Qwen3-8B-bnb-4bit"><span>Qwen3-8B-bnb-4bit</span></label></li><li><label><input autocomplete="off" type="checkbox" value="Qwen3-235B-A22B-GGUF"><span>Qwen3-235B-A22B-GGUF</span></label></li><li><label><input autocomplete="off" type="checkbox" value="Qwen3-235B-A22B-128K-GGUF"><span>Qwen3-235B-A22B-128K-GGUF</span></label></li><li><label><input autocomplete="off" type="checkbox" value="Qwen3-14B-128K-GGUF"><span>Qwen3-14B-128K-GGUF</span></label></li><li><label><input autocomplete="off" type="checkbox" value="Phi-4-mini-reasoning-bnb-4bit"><span>Phi-4-mini-reasoning-bnb-4bit</span></label></li><li><label><input autocomplete="off" type="checkbox" value="Phi-4-reasoning-plus-GGUF"><span>Phi-4-reasoning-plus-GGUF</span></label></li><li><label><input autocomplete="off" type="checkbox" value="Phi-4-reasoning-plus"><span>Phi-4-reasoning-plus</span></label></li><li><label><input autocomplete="off" type="checkbox" value="OLMo-2-0425-1B-Instruct-GGUF"><span>OLMo-2-0425-1B-Instruct-GGUF</span></label></li><li><label><input autocomplete="off" type="checkbox" value="OLMo-2-0425-1B-Instruct-unsloth-bnb-4bit"><span>OLMo-2-0425-1B-Instruct-unsloth-bnb-4bit</span></label></li><li><label><input autocomplete="off" type="checkbox" value="OLMo-2-0425-1B-Instruct-bnb-4bit"><span>OLMo-2-0425-1B-Instruct-bnb-4bit</span></label></li><li><label><input autocomplete="off" type="checkbox" value="phi-4-reasoning"><span>phi-4-reasoning</span></label></li><li><label><input autocomplete="off" type="checkbox" value="Phi-4-reasoning-GGUF"><span>Phi-4-reasoning-GGUF</span></label></li><li><label><input autocomplete="off" type="checkbox" value="phi-4-reasoning-unsloth-bnb-4bit"><span>phi-4-reasoning-unsloth-bnb-4bit</span></label></li><li><label><input autocomplete="off" type="checkbox" value="phi-4-reasoning-bnb-4bit"><span>phi-4-reasoning-bnb-4bit</span></label></li><li><label><input autocomplete="off" type="checkbox" value="Qwen3-16B-A3B-GGUF"><span>Qwen3-16B-A3B-GGUF</span></label></li><li><label><input autocomplete="off" type="checkbox" value="Qwen3-235B-A22B"><span>Qwen3-235B-A22B</span></label></li><li><label><input autocomplete="off" type="checkbox" value="Llama-Guard-4-12B"><span>Llama-Guard-4-12B</span></label></li><li><label><input autocomplete="off" type="checkbox" value="granite-3.3-2b-instruct-GGUF"><span>granite-3.3-2b-instruct-GGUF</span></label></li><li><label><input autocomplete="off" type="checkbox" value="DeepSeek-Prover-V2-7B-GGUF"><span>DeepSeek-Prover-V2-7B-GGUF</span></label></li><li><label><input autocomplete="off" type="checkbox" value="granite-3.3-8b-instruct-GGUF"><span>granite-3.3-8b-instruct-GGUF</span></label></li><li><label><input autocomplete="off" type="checkbox" value="INTELLECT-2-GGUF"><span>INTELLECT-2-GGUF</span></label></li><li><label><input autocomplete="off" type="checkbox" value="Qwen2.5-VL-3B-Instruct-GGUF"><span>Qwen2.5-VL-3B-Instruct-GGUF</span></label></li><li><label><input autocomplete="off" type="checkbox" value="Qwen2.5-VL-7B-Instruct-GGUF"><span>Qwen2.5-VL-7B-Instruct-GGUF</span></label></li><li><label><input autocomplete="off" type="checkbox" value="Llama-3.1-Nemotron-Nano-8B-v1"><span>Llama-3.1-Nemotron-Nano-8B-v1</span></label></li><li><label><input autocomplete="off" type="checkbox" value="Llama-3.1-Nemotron-Nano-8B-v1-GGUF"><span>Llama-3.1-Nemotron-Nano-8B-v1-GGUF</span></label></li><li><label><input autocomplete="off" type="checkbox" value="Qwen2.5-VL-72B-Instruct-GGUF"><span>Qwen2.5-VL-72B-Instruct-GGUF</span></label></li><li><label><input autocomplete="off" type="checkbox" value="Qwen3-30B-A3B-128K-bnb-4bit"><span>Qwen3-30B-A3B-128K-bnb-4bit</span></label></li><li><label><input autocomplete="off" type="checkbox" value="CrisperWhisper"><span>CrisperWhisper</span></label></li><li><label><input autocomplete="off" type="checkbox" value="csm-1b"><span>csm-1b</span></label></li><li><label><input autocomplete="off" type="checkbox" value="Spark-TTS-0.5B"><span>Spark-TTS-0.5B</span></label></li><li><label><input autocomplete="off" type="checkbox" value="Llama-OuteTTS-1.0-1B"><span>Llama-OuteTTS-1.0-1B</span></label></li><li><label><input autocomplete="off" type="checkbox" value="Seed-Coder-8B-Reasoning-GGUF"><span>Seed-Coder-8B-Reasoning-GGUF</span></label></li><li><label><input autocomplete="off" type="checkbox" value="Seed-Coder-8B-Instruct"><span>Seed-Coder-8B-Instruct</span></label></li><li><label><input autocomplete="off" type="checkbox" value="Seed-Coder-8B-Instruct-GGUF"><span>Seed-Coder-8B-Instruct-GGUF</span></label></li><li><label><input autocomplete="off" type="checkbox" value="InternVL3-1B-GGUF"><span>InternVL3-1B-GGUF</span></label></li><li><label><input autocomplete="off" type="checkbox" value="InternVL3-14B-GGUF"><span>InternVL3-14B-GGUF</span></label></li><li><label><input autocomplete="off" type="checkbox" value="Llasa-1B"><span>Llasa-1B</span></label></li><li><label><input autocomplete="off" type="checkbox" value="InternVL3-38B-GGUF"><span>InternVL3-38B-GGUF</span></label></li><li><label><input autocomplete="off" type="checkbox" value="InternVL3-78B-GGUF"><span>InternVL3-78B-GGUF</span></label></li><li><label><input autocomplete="off" type="checkbox" value="InternVL3-14B-Instruct"><span>InternVL3-14B-Instruct</span></label></li><li><label><input autocomplete="off" type="checkbox" value="medgemma-4b-it"><span>medgemma-4b-it</span></label></li><li><label><input autocomplete="off" type="checkbox" value="medgemma-4b-it-GGUF"><span>medgemma-4b-it-GGUF</span></label></li></ul></details>
+      </div>
+    </div>
+    <div id="spacer"></div>
+
+    <script>
+      // An independent observer: it records what the *page* received, so the
+      // test can assert the macro really produced input.
+      window.__emmLog = [];
+      window.__emmClicks = [];
+      (function () {
+        var types = [
+          'mousemove',
+          'mousedown',
+          'mouseup',
+          'click',
+          'dblclick',
+          'contextmenu'
+        ];
+        var t0 = performance.now();
+        types.forEach(function (type) {
+          document.addEventListener(
+            type,
+            function (ev) {
+              var entry = {
+                type: ev.type,
+                x: Math.round(ev.clientX),
+                y: Math.round(ev.clientY),
+                button: ev.button,
+                isTrusted: ev.isTrusted,
+                target: ev.target && ev.target.id ? ev.target.id : null,
+                t: Math.round(performance.now() - t0)
+              };
+              window.__emmLog.push(entry);
+              if (ev.type === 'click') window.__emmClicks.push(entry);
+              var el = document.getElementById('log-count');
+              el.textContent = String(window.__emmLog.length);
+            },
+            true
+          );
+        });
+
+        document.querySelectorAll('.box').forEach(function (box) {
+          box.addEventListener('mousedown', function () {
+            box.classList.add('pressed');
+          });
+          window.addEventListener('mouseup', function () {
+            box.classList.remove('pressed');
+          });
+          box.addEventListener('click', function () {
+            box.dataset.clicks = String((Number(box.dataset.clicks) || 0) + 1);
+          });
+        });
+
+        // Native state of the form controls, plus how many `change` events the
+        // page actually received (that is what frameworks hook into).
+        var changes = 0;
+        var out = document.getElementById('change-count');
+        document.getElementById('controls').addEventListener('change', function () {
+          changes++;
+          out.textContent = 'changes: ' + changes;
+        });
+        var ids = ['chk-a', 'chk-b', 'radio-1', 'radio-2'];
+        window.__emmResetControls = function () {
+          ids.forEach(function (id) {
+            var el = document.getElementById(id);
+            if (el.type === 'checkbox') el.checked = false;
+            else el.checked = id === 'radio-1';
+          });
+          changes = 0;
+          out.textContent = 'changes: 0';
+        };
+        window.__emmState = function () {
+          return {
+            chkA: document.getElementById('chk-a').checked,
+            chkB: document.getElementById('chk-b').checked,
+            radio: document.querySelector('input[name="group"]:checked').id,
+            changes: changes
+          };
+        };
+      })();
+    </script>
+  </body>
+</html>
