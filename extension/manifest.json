@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Easy Mouse Macro",
   "version": "1.0.0",
-  "description": "Record mouse movements, clicks and wheel scrolling, plus <tab> and <space> keys, inside a browser tab, then re-play multiple repetitions at up to 10x the speed.",
+  "description": "Record mouse movements, clicks and wheel scrolling - plus <TAB> and <SPACE> keys - inside a browser tab, then replay them.",
   "minimum_chrome_version": "116",
   "icons": {
     "16": "icons/icon16.png",
